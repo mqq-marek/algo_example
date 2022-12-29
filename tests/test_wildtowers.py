@@ -39,9 +39,12 @@ def test_can_generate_combinations():
     assert list(generate_combinations([])) == []
     assert list(generate_combinations([[0]])) == []
     assert list(generate_combinations([[1]])) == [((0, 0),)]
-    assert list(generate_combinations([[1, 1], [0, 1]])) == [((0, 0), (1, 1)),
-                                                             ((0, 1), (1, 1))]
-    assert list(generate_combinations([[1, 1, 0], [1, 0, 1], [0, 1, 1]])) == [
+    assert list(generate_combinations([[1, 1],
+                                       [0, 1]])) == [((0, 0), (1, 1)),
+                                                     ((0, 1), (1, 1))]
+    assert list(generate_combinations([[1, 1, 0],
+                                       [1, 0, 1],
+                                       [0, 1, 1]])) == [
         ((0, 0), (1, 0), (2, 1)),
         ((0, 0), (1, 0), (2, 2)),
         ((0, 0), (1, 2), (2, 1)),
@@ -50,15 +53,19 @@ def test_can_generate_combinations():
         ((0, 1), (1, 0), (2, 2)),
         ((0, 1), (1, 2), (2, 1)),
         ((0, 1), (1, 2), (2, 2))]
-    assert list(generate_combinations([[1, 1], [0, 0]])) == []
+    assert list(generate_combinations([[1, 1],
+                                       [0, 0]])) == []
 
 
 def test_can_get_allowable_positions():
-    assert list(allowable_positions([])) == []
+    assert list(allowable_positions([])) == [[]]
     assert list(allowable_positions([[0]])) == [[]]
     assert list(allowable_positions([[1]])) == [[(0, 0)]]
-    assert list(allowable_positions([[1, 0], [0, 1]])) == [[(0, 0)], [(1, 1)]]
-    assert list(allowable_positions([[1, 1], [0, 1]])) == [[(0, 0), (0, 1)], [(1, 1)]]
+    assert list(allowable_positions([[1, 0],
+                                     [0, 1]])) == [[(0, 0)], [(1, 1)]]
+    assert list(allowable_positions([[1, 1],
+                                     [0, 1]])) == \
+           [[(0, 0), (0, 1)], [(1, 1)]]
 
 
 def test_can_solve_empty():
@@ -83,7 +90,7 @@ def test_can_solve_2x2_square_with_row_holes():
 
 def test_can_solve_empty_squares():
     for i in range(1, 10):
-        assert wild_towers('0 ' * (i * i)) == 0
+        assert wild_towers('0' * (i * i)) == 0
 
 
 def test_can_solve_half_empty_squares():

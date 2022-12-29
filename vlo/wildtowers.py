@@ -15,13 +15,17 @@ def make_matrix_from_0_and_1(board):
     Result is matrix of rows with 0/1 int.
     """
     assert isinstance(board, str)
-    filtered_board = [ch for ch in board if ch in "01"]
-    total = len(filtered_board)
-    size = int(math.sqrt(total))
-    assert size * size == total
-    rows = [filtered_board[row * size:(row + 1) * size]
-            for row in range(size)]
-    matrix = [[int(ch) for ch in row]
+    filtered_board = [ch for ch in board if ch in "01"]     # remove chars not being 0 nor 1
+    total = len(filtered_board)                             # count amount of 0's and 1's
+    size = int(math.sqrt(total))                            # count integer square root
+    assert size * size == total                             # verify that total is square of size
+    # rows is filtered_board split into 'size' rows having 'size' chars
+    rows = [filtered_board[row_index * size:(row_index + 1) * size]     # take next size chars
+                                                                        # from filtered_board string
+            for row_index in range(size)
+            ]
+    matrix = [[int(ch) for ch in row]                       # 'size' chars string of 0's and 1's converted
+                                                            # into list of 0 and 1
               for row in rows
               ]
     return matrix
@@ -45,7 +49,7 @@ def solve_brute_force(matrix):
     validate if they all have coordinates which prevent rooks to be able to attack
     other rook in single move."""
     list_for_check = generate_combinations(matrix)
-    result = sum(validate_combination(postions) for postions in list_for_check)
+    result = sum(validate_combination(postions, matrix) for postions in list_for_check)
     return result
 
 
@@ -74,11 +78,17 @@ def allowable_positions(matrix):
     return [[]]
 
 
-def validate_combination(positions):
-    """Validate if given list of fugures postions is ok for rook that means that
-    all x and all y coordinates are different."""
-    x_coords, y_coords = zip(*positions)
-    return len(set(x_coords)) == len(set(y_coords)) == len(positions)
+def validate_combination(positions, matrix=None):
+    """Validate if given list of rook positions is ok for rook that means that
+    all row and all col coordinates are different."""
+    row_coords,col_coords = zip(*positions)
+    # depend on the way how positions are generated validate:
+    # necessary if position is generated using: itertools.combinations(range(len(matrix)), len(matrix)) or
+    # itertools.permutations(range(len(matrix)), len(matrix)) for skip positions when we have hole on some position
+    if matrix and not all(matrix[row_ndx][col_ndx] == 1 for row_ndx, col_ndx in zip(row_coords, col_coords)):
+        return False
+    # verify that all row and col coords are unique so len(set(sequence)) = len(sequence)
+    return len(set(row_coords)) == len(set(col_coords)) == len(positions)
 
 
 def process_data(input, output):
@@ -118,7 +128,7 @@ class TowerSolver:
 
         result = self.mapper.get(map_key)
         if result is None:
-            # cCompute result if not in mapper
+            # Compute result if not in mapper
             result = 0
             for column in columns:
                 if self.matrix[size - 1][column]:
@@ -134,18 +144,19 @@ def solve_loop_recursive(matrix):
         return int(matrix[0][0])
 
     left_col = [row[0] for row in matrix]
-    return sum([solve_loop_recursive([row[1:]
+    return sum([solve_loop_recursive([row[1:]                               # build matrix without first element in row
                                       for ndx, row in enumerate(matrix)
-                                      if ndx != index])
-                for index, value in enumerate(left_col) if value
-
+                                      if ndx != index])                     # for all rws except current index
+                for index, value in enumerate(left_col)                     # for indexed values of left_col
+                if value                                                    # when value is 1
                 ])
 
-
-DEBUG = True
+# If DEBUG True verify results of all 3 methods - slow!
+DEBUG = False
 
 
 def wild_towers(board='', print_result=False):
+    # Matrix example: [[1,0, 1], [1, 1, 1], [1, 0, 1]]
     matrix = []
     if isinstance(board, str):
         if '0' in board or '1' in board:
