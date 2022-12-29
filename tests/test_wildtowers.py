@@ -45,14 +45,14 @@ def test_can_generate_combinations():
     assert list(generate_combinations([[1, 1, 0],
                                        [1, 0, 1],
                                        [0, 1, 1]])) == [
-        ((0, 0), (1, 0), (2, 1)),
-        ((0, 0), (1, 0), (2, 2)),
-        ((0, 0), (1, 2), (2, 1)),
-        ((0, 0), (1, 2), (2, 2)),
-        ((0, 1), (1, 0), (2, 1)),
-        ((0, 1), (1, 0), (2, 2)),
-        ((0, 1), (1, 2), (2, 1)),
-        ((0, 1), (1, 2), (2, 2))]
+               ((0, 0), (1, 0), (2, 1)),
+               ((0, 0), (1, 0), (2, 2)),
+               ((0, 0), (1, 2), (2, 1)),
+               ((0, 0), (1, 2), (2, 2)),
+               ((0, 1), (1, 0), (2, 1)),
+               ((0, 1), (1, 0), (2, 2)),
+               ((0, 1), (1, 2), (2, 1)),
+               ((0, 1), (1, 2), (2, 2))]
     assert list(generate_combinations([[1, 1],
                                        [0, 0]])) == []
 
@@ -114,11 +114,11 @@ def test_can_solve_full_squares():
     for i in range(1, 9):
         assert wild_towers('1' * (i * i)) == math.factorial(i)
 
+
 def test_can_solve_5x5_squares():
     print()
     size = 6
-    assert wild_towers('1' * (size*size), print_result=True) == math.factorial(size)
-
+    assert wild_towers('1' * (size * size), print_result=True) == math.factorial(size)
 
 
 def test_can_process_data():
